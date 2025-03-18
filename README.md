@@ -25,6 +25,21 @@ c)	AI – Response – The last Node.js life is a XGBoost Classifier trained on 
 
 An Logic based AI loan eligibility checker that assigns score to a user based on th entered details. Scores are assigned based on ratio logic and a probability is returned for loan acceptance with hunam-readable message.
 
+Output example:
+
+![image](https://github.com/user-attachments/assets/ec7732a2-b656-4c64-926b-582443324c64)
+
+![image](https://github.com/user-attachments/assets/f888f62c-d0fd-4513-b2ec-1e18b04d534d)
+
+How to run?
+
+1) Install Flask and Numpy with pip if not already done
+   
+2) Run Python script
+   
+3) Open local host on a web browser
+
+
 # 3)	AI / Low-code
 
 a)	AI-tools – I would make use of Cursors free trial to develop an MVP within 24 hrs. With the right prompt engineering, I will ask Cursor to develop a simple front end with HTML and CSS, back end with Node.js and AI-Reponses as a separate file. I will ask Cursor to develop a dependency tree, make interfaces secure and containerize it with docker. 
