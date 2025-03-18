@@ -3,7 +3,7 @@ Zeta Assignment Question 2
 
 Question 2
 
-#1)	MVP
+# 1)	MVP
 Full stack AI powered customer portal – since this is an MVP and must be prototyped at the earliest (24 Hrs.), this would be my architecture: 
 
 ![image](https://github.com/user-attachments/assets/bdb6e26b-b1ea-49ec-b673-da9a733d8aa0)
@@ -21,11 +21,11 @@ b)	Back end – 3 Node.js files. One for running server and setting configuratio
 
 c)	AI – Response – The last Node.js life is a XGBoost Classifier trained on credit, account balance, previous loans, existing loans, income etc. data that accesses loan eligibility.
 
-#2)	Simple API with python is attached as a code in the folder.
+# 2)	Simple API with python is attached as a code in the folder.
 
 An Logic based AI loan eligibility checker that assigns score to a user based on th entered details. Scores are assigned based on ratio logic and a probability is returned for loan acceptance with hunam-readable message.
 
-#3)	AI / Low-code
+# 3)	AI / Low-code
 
 a)	AI-tools – I would make use of Cursors free trial to develop an MVP within 24 hrs. With the right prompt engineering, I will ask Cursor to develop a simple front end with HTML and CSS, back end with Node.js and AI-Reponses as a separate file. I will ask Cursor to develop a dependency tree, make interfaces secure and containerize it with docker. 
 I will make use of Napkin.ai to build workflows and UI to explain product to investors if any.
