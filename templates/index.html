@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Financial Loan Assessment Portal</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f0f2f5;
+            padding: 30px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .application-container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        .assessment-card {
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            background: white;
+            border: none;
+            margin-bottom: 25px;
+        }
+        .form-label {
+            font-weight: 500;
+            color: #2c3e50;
+        }
+        .progress {
+            height: 30px;
+            border-radius: 15px;
+            background-color: #e9ecef;
+        }
+        .progress-bar {
+            transition: width 1s ease-in-out;
+        }
+        .assessment-results {
+            display: none;
+            margin-top: 30px;
+        }
+        .input-group-text {
+            background-color: #f8f9fa;
+            color: #495057;
+        }
+        .btn-evaluate {
+            padding: 12px 30px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .timestamp {
+            font-size: 0.85rem;
+            color: #6c757d;
+        }
+        .feedback-section {
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="application-container">
+        <h1 class="text-center mb-4">Financial Loan Assessment Portal</h1>
+        <div class="assessment-card card">
+            <div class="card-body p-4">
+                <form id="loanApplicationForm">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="savingsBalance" class="form-label">
+                                <i class="fas fa-piggy-bank me-2"></i>Savings Account Balance ($)
+                            </label>
+                            <div class="input-group">
+                                <span class="input-group-text">$</span>
+                                <input type="number" class="form-control" id="savingsBalance" required min="0" step="0.01">
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="creditScore" class="form-label">
+                                <i class="fas fa-chart-line me-2"></i>Credit Score
+                            </label>
+                            <input type="number" class="form-control" id="creditScore" required min="300" max="850">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="monthlyDebt" class="form-label">
+                                <i class="fas fa-file-invoice-dollar me-2"></i>Current Monthly Debt ($)
+                            </label>
+                            <div class="input-group">
+                                <span class="input-group-text">$</span>
+                                <input type="number" class="form-control" id="monthlyDebt" required min="0" step="0.01">
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="annualIncome" class="form-label">
+                                <i class="fas fa-dollar-sign me-2"></i>Annual Gross Income ($)
+                            </label>
+                            <div class="input-group">
+                                <span class="input-group-text">$</span>
+                                <input type="number" class="form-control" id="annualIncome" required min="0" step="0.01">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="loanDuration" class="form-label">
+                                <i class="fas fa-calendar-alt me-2"></i>Desired Loan Term (months)
+                            </label>
+                            <input type="number" class="form-control" id="loanDuration" required min="1" max="360">
+                        </div>
+                    </div>
+                    <div class="text-center mt-4">
+                        <button type="submit" class="btn btn-primary btn-evaluate">
+                            <i class="fas fa-calculator me-2"></i>Evaluate Application
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div id="assessmentResults" class="assessment-results">
+            <div class="assessment-card card">
+                <div class="card-body p-4">
+                    <h4 class="card-title mb-4">
+                        <i class="fas fa-clipboard-check me-2"></i>Assessment Results
+                    </h4>
+                    <div class="mb-4">
+                        <label class="form-label">Risk Assessment Score:</label>
+                        <div class="progress">
+                            <div id="riskScoreBar" class="progress-bar" role="progressbar" style="width: 0%">0%</div>
+                        </div>
+                    </div>
+                    <div class="feedback-section">
+                        <h5 class="mb-3">Detailed Feedback:</h5>
+                        <p id="detailedFeedback" class="lead mb-3"></p>
+                        <p class="timestamp mb-0">
+                            <i class="fas fa-clock me-2"></i>
+                            Evaluation completed: <span id="evaluationTimestamp"></span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('loanApplicationForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const applicationData = {
+                current_balance: document.getElementById('savingsBalance').value,
+                credit_score: document.getElementById('creditScore').value,
+                current_loans: document.getElementById('monthlyDebt').value,
+                income: document.getElementById('annualIncome').value,
+                loan_term: document.getElementById('loanDuration').value
+            };
+
+            try {
+                const response = await fetch('/check_eligibility', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(applicationData)
+                });
+
+                const assessmentResult = await response.json();
+                
+                // Update UI with assessment results
+                document.getElementById('assessmentResults').style.display = 'block';
+                document.getElementById('riskScoreBar').style.width = `${assessmentResult.application_score}%`;
+                document.getElementById('riskScoreBar').textContent = `${assessmentResult.application_score}%`;
+                document.getElementById('detailedFeedback').textContent = assessmentResult.detailed_feedback;
+                document.getElementById('evaluationTimestamp').textContent = assessmentResult.evaluation_timestamp;
+
+                // Update progress bar styling based on score
+                const scoreBar = document.getElementById('riskScoreBar');
+                if (assessmentResult.application_score >= 80) {
+                    scoreBar.className = 'progress-bar bg-success';
+                } else if (assessmentResult.application_score >= 60) {
+                    scoreBar.className = 'progress-bar bg-info';
+                } else if (assessmentResult.application_score >= 40) {
+                    scoreBar.className = 'progress-bar bg-warning';
+                } else {
+                    scoreBar.className = 'progress-bar bg-danger';
+                }
+
+                // Smooth scroll to results
+                document.getElementById('assessmentResults').scrollIntoView({ behavior: 'smooth' });
+            } catch (error) {
+                console.error('Error:', error);
+                alert('An error occurred while processing your application. Please try again.');
+            }
+        });
+    </script>
+</body>
+</html> 
